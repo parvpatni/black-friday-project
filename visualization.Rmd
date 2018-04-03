@@ -1,0 +1,351 @@
+---
+title: "Black Friday Data Visualization"
+author: "Parv"
+date: "8 March 2018"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Problem Statement
+
+To understand the customer purchase behaviour (specifically, purchase amount) against various products of different categories so that sales of a retail company can be boosted.
+
+We will be building models to predict the purchase amount of customer against various products which will help us to create personalized offer for customers against different products.
+
+## 2. Setting up the environment
+
+Setting up environment for analysis, loading data, packages, understanding variables.
+
+## 2.1 Loading Data
+
+```{r}
+getwd()
+data_set<-read.csv(paste("train.csv",sep = ""))
+
+## 75% of the sample size
+smp_size <- floor(0.75 * nrow(data_set))
+
+## setting the seed to make partition reproductible
+set.seed(123)
+train_ind <- sample(seq_len(nrow(data_set)), size = smp_size)
+
+train_set <- data_set[train_ind, ]
+test_set <- data_set[-train_ind, ]
+
+y_test<-as.data.frame(test_set[,12], drop=false)
+names(y_test)<-c("purchase")
+
+test_set<-as.data.frame(test_set[,1:11], drop=false)
+dim(test_set)
+```
+
+## 2.2 Checking dimensions of the data
+
+```{r}
+dim(train_set)
+dim(test_set)
+```
+
+**Training data** set consists of 4,12,551 entries across 12 variables.  
+**Test Data** set consists of 1,37,517 entries across 11 variables.
+
+12th variable in Training Data set is our response Variable which needs to be predicted in test data set.
+
+# 2.3 Understanding the Data set
+
+```{r}
+library(psych)
+describe(train_set)
+describe(test_set)
+```
+
+# 3. Univariate Analysis
+
+Let's First Find categorical and continuos variables in our training data set.
+
+```{r}
+str(train_set)
+```
+
+## Data Prepartion & Exploratory Data Analysis 
+Firstly doing the univariate exploration and modifying the data if deemed necessary. 
+
+**one way contigency table**
+
+```{r}
+mytable <- with(train_set,table(Gender))
+mytable
+lbls <- c("M","F")
+pct <- round(mytable/sum(mytable)*100)
+lbls <- paste(lbls, pct) 
+lbls <- paste(lbls,"%",sep="")
+pie(mytable,labels = lbls)
+```
+
+```{r}
+mytable1 <- with(train_set,table(Marital_Status))
+mytable1
+lbls1 <- c("Single","Married")
+pct1 <- round(mytable1/sum(mytable1)*100)
+lbls1 <- paste(lbls1, pct1) 
+lbls1<- paste(lbls1,"%",sep="")
+pie(mytable1,labels = lbls1)
+```
+
+```{r}
+mytable2 <- with(train_set,table(City_Category))
+mytable2
+lbls2 <- c("A","B","C")
+pct2 <- round(mytable2/sum(mytable2)*100)
+lbls2 <- paste(lbls2, pct2) 
+lbls2<- paste(lbls2,"%",sep="")
+pie(mytable2,labels = lbls2)
+```
+
+
+```{r}
+par(mfrow = c(1, 2))
+#train data
+with(train_set,table(Stay_In_Current_City_Years))
+#test data
+with(test_set,table(Stay_In_Current_City_Years))
+```
+
+```{r}
+par(mfrow = c(1, 2))
+a<-with(train_set,table(Product_Category_1))
+#a
+barplot(a,main ="train_data")
+b<-with(test_set,table(Product_Category_1))
+#b
+barplot(b,main ="test_data")
+```
+
+```{r}
+par(mfrow = c(1, 2))
+a<-with(train_set,table(Product_Category_2))
+#a
+barplot(a,main ="train_data")
+b<-with(test_set,table(Product_Category_2))
+#b
+barplot(b,main ="test_data")
+```
+
+```{r}
+library(lattice)
+par(mfrow = c(1, 2))
+a<-with(train_set,table(Product_Category_3))
+#a
+barchart(a,main ="train_data",horizontal = "FALSE")
+b<-with(test_set,table(Product_Category_3))
+#b
+barchart(b,main ="test_data",horizontal = "FALSE")
+```
+
+**2 way table**
+
+```{r}
+xtabs(~Marital_Status+Gender,data=train_set)
+xtabs(Purchase~Product_Category_3,aggregate(Purchase~Product_Category_3,train_set,mean))
+xtabs(Purchase~Product_Category_2,aggregate(Purchase~Product_Category_2,train_set,mean))
+xtabs(Purchase~Product_Category_1,aggregate(Purchase~Product_Category_1,train_set,mean))
+```
+
+## 3.1. Unique Data For EDA & Data type modification 
+Since our data is stored based on product id i.e. if a person buying 10 products then his data will be stored in 10 observation and hence there will cause a repetition of same person data.
+
+```{r}
+train_set$User_ID <- as.factor(train_set$User_ID)
+train_set$Product_ID <- as.factor(train_set$Product_ID)
+train_set$Marital_Status <- as.factor(ifelse(train_set$Marital_Status == 1, 'Married', 'Single'))
+train_set$Age <- as.factor(train_set$Age)
+train_set$Gender <- as.factor(ifelse(train_set$Gender=='M', 'Male', 'Female'))
+train_set$Occupation <- as.factor(train_set$Occupation)
+train_set$City_Category <- as.factor(train_set$City_Category)
+train_set$Stay_In_Current_City_Years <- as.factor(train_set$Stay_In_Current_City_Years)
+
+test_set$User_ID <- as.factor(test_set$User_ID)
+test_set$Product_ID <- as.factor(test_set$Product_ID)
+test_set$Marital_Status <- as.factor(ifelse(test_set$Marital_Status == 1, 'Married', 'Single'))
+test_set$Age <- as.factor(test_set$Age)
+test_set$Gender <- as.factor(ifelse(test_set$Gender=='M', 'Male', 'Female'))
+test_set$Occupation <- as.factor(test_set$Occupation)
+test_set$City_Category <- as.factor(test_set$City_Category)
+test_set$Stay_In_Current_City_Years <- as.factor(test_set$Stay_In_Current_City_Years)
+
+#str(train_set)
+#str(test_set)
+```
+
+The function distinct() in dplyr package can be used to keep only unique/distinct rows from a data frame. If there are duplicate rows, only the first row is preserved. It’s an efficient version of the R base function unique(). 
+
+```{r}
+library("dplyr")
+EDA_Distinct <- distinct(train_set, User_ID, Age, Gender, Marital_Status, Occupation, City_Category, Stay_In_Current_City_Years)
+#str(EDA_Distinct)
+head(EDA_Distinct)
+```
+
+#3.2. User_ID 
+
+**Creating new variables User_Purchase_Count, Total_Spending and Avg_Spending_on_each_Product**
+
+**Total number of product purchased bu customer**
+```{r}
+#creating a new data frame to stor the number of purchase made by each user
+userIDCount <- as.data.frame(table(train_set$User_ID))
+names(userIDCount) <- c("User_ID","User_Purchase_Count")
+head(userIDCount)
+```
+
+merging df
+```{r}
+train_set <- merge(x = train_set, y = userIDCount, by = "User_ID", all.x = TRUE)
+```
+
+changing the test dataset too
+```{r}
+# writing code such that if a new user comes for the first time his count is set to one in test dataset
+test_set <- merge(x = test_set, y = userIDCount, by = "User_ID", all.x = TRUE)
+test_set[is.na(test_set$User_Purchase_Count), "User_Purchase_Count"] <- 1
+#Changing the datatype
+test_set$User_Purchase_Count <- as.integer(test_set$User_Purchase_Count)
+```
+
+**Total Spending by a User**
+
+Changing the Training Dataset
+```{r}
+# creating a data frame to store the total spending by a user
+totspend <- aggregate(train_set$Purchase, by=list(Category=train_set$User_ID), FUN=sum)
+names(totspend) <- c("User_ID","Total_Spending")
+train_set <- merge(x = train_set, y = totspend, by = "User_ID", all.x = TRUE)
+#head(train_set)
+```
+
+changing test too
+```{r}
+test_set <- merge(x = test_set, y = totspend, by = "User_ID", all.x = TRUE)
+# writing code such that if a new user comes for the first time his count is set to zero for total spending in test dataset
+test_set[is.na(test_set$Total_Spending), "Total_Spending"] <- 0
+#Changing the datatype
+test_set$Total_Spending <- as.integer(test_set$Total_Spending)
+```
+
+**Average Spending on each product by a customer**
+
+Now calculating the average spending of user on each product we can divide Total_Spending by User_Purchase Count.
+Avg_Spending_on_each_Product = Total_Spending / User_Purchase_Count
+
+```{r}
+train_set$Avg_Spending_on_each_Product <- train_set$Total_Spending / train_set$User_Purchase_Count
+test_set$Avg_Spending_on_each_Product <- test_set$Total_Spending / test_set$User_Purchase_Count
+#Changing the datatype 
+train_set$Avg_Spending_on_each_Product <- as.integer(train_set$Avg_Spending_on_each_Product)
+test_set$Avg_Spending_on_each_Product <- as.integer(test_set$Avg_Spending_on_each_Product)
+```
+
+```{r}
+summary(totspend$Total_Spending)
+```
+
+```{r}
+library(ggplot2)
+ggplot(totspend, aes(x=Total_Spending)) + geom_density(fill="red", col="black", alpha=0.80)
+```
+
+**removing unused df**
+
+```{r}
+rm(userIDCount, totspend)
+```
+
+# Analysing using distict data
+
+```{r}
+#Updating EDA_Distinct dataframe
+EDA_Distinct <- distinct(train_set, User_ID, Age, Gender, Marital_Status, Occupation, City_Category, Stay_In_Current_City_Years, User_Purchase_Count)
+d1 <- summary(EDA_Distinct$User_Purchase_Count)
+d1
+```
+
+```{r}
+ggplot(EDA_Distinct, aes(x=User_Purchase_Count)) + geom_density(fill="red", col="black", alpha=0.80) + annotate(geom = "text", x = 6, y = 0.0125, label = "Min")
+histogram(EDA_Distinct$User_Purchase_Count)
+bwplot(Age~User_Purchase_Count|Marital_Status+Gender,data = EDA_Distinct)
+bwplot(User_Purchase_Count~Occupation|Marital_Status+Gender,data = EDA_Distinct)
+```
+
+#3.3 Product_id
+
+```{r}
+head(train_set$Product_ID,15)
+```
+i.e. there are a total of 3631 number of product
+
+**Creating new variables Total number of product unit sold, Average price of a product, Sd of the product price**
+
+```{r}
+SoldProdCount <- as.data.frame(table(train_set$Product_ID))
+names(SoldProdCount) <- c("Product_ID","Product_Sold_Count")
+
+SoldProdPriceMean <- aggregate(train_set$Purchase, by=list(Category=train_set$Product_ID), FUN=mean)
+names(SoldProdPriceMean) <- c("Product_ID","Product_Mean_Price")
+
+SoldProdPriceSD <- aggregate(train_set$Purchase, by=list(Category=train_set$Product_ID), FUN=sd)
+names(SoldProdPriceSD) <- c("Product_ID","Product_SD_Price")
+```
+
+```{r}
+summary(SoldProdCount$Product_Sold_Count)
+histogram(SoldProdCount$Product_Sold_Count)
+histogram(SoldProdPriceMean$Product_Mean_Price)
+histogram(SoldProdPriceSD$Product_SD_Price)
+```
+
+#Correlation Matrix
+
+changing variables type to numeric
+
+```{r}
+corr_train <- train_set
+corr_train$User_ID <- as.numeric(corr_train$User_ID)
+corr_train$User_Purchase_Count <- as.numeric(corr_train$User_Purchase_Count)
+corr_train$Product_ID <- as.numeric(corr_train$Product_ID)
+
+corr_train$Gender <- as.numeric(ifelse(corr_train$Gender=="Male", 1, 0))
+
+corr_train$Age <- as.numeric(ifelse(corr_train$Age=='0-17', 17, ifelse(corr_train$Age=='18-25', 25, ifelse(corr_train$Age=='26-35', 35, ifelse(corr_train$Age=='36-45', 45, ifelse(corr_train$Age=='46-50', 50, ifelse(corr_train$Age=='51-55', 55, 65)))))))
+
+corr_train$Marital_Status <- as.numeric(ifelse(corr_train$Marital_Status=="Married", '1', '0'))
+
+corr_train$Occupation <- as.numeric(corr_train$Occupation)
+
+corr_train$City_Category <- as.numeric(ifelse(corr_train$City_Category=='A', 1, ifelse(corr_train$City_Category=='B', 2, 3)))
+
+corr_train$Stay_In_Current_City_Years <- as.numeric(ifelse(corr_train$Stay_In_Current_City_Years=='4+', 6, corr_train$Stay_In_Current_City_Years))
+
+corr_train$Total_Spending <- as.numeric(corr_train$Total_Spending)
+corr_train$Avg_Spending_on_each_Product <- as.numeric(corr_train$Avg_Spending_on_each_Product)
+
+
+#target Variable 
+Y <- as.numeric(corr_train$Purchase)
+corr_train$Product_Category_2<-NULL
+corr_train$Product_Category_3<-NULL
+cor(corr_train)
+```
+
+#Corrplot
+
+```{r}
+library(corrplot)
+M <- cor(corr_train)
+corrplot(M, method="number")
+```

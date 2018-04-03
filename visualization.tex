@@ -1,0 +1,653 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Black Friday Data Vosualization},
+            pdfauthor={Parv},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{Black Friday Data Vosualization}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Parv}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{8 March 2018}
+
+
+\begin{document}
+\maketitle
+
+\subsection{1. Problem Statement}\label{problem-statement}
+
+To understand the customer purchase behaviour (specifically, purchase
+amount) against various products of different categories so that sales
+of a retail company can be boosted.
+
+We will be building models to predict the purchase amount of customer
+against various products which will help us to create personalized offer
+for customers against different products.
+
+\subsection{2. Setting up the
+environment}\label{setting-up-the-environment}
+
+Setting up environment for analysis, loading data, packages,
+understanding variables.
+
+\subsection{2.1 Loading Data}\label{loading-data}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getwd}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "/home/parv/black friday project"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data_set<-}\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"train.csv"}\NormalTok{,}\DataTypeTok{sep =} \StringTok{""}\NormalTok{))}
+
+\NormalTok{## 75% of the sample size}
+\NormalTok{smp_size <-}\StringTok{ }\KeywordTok{floor}\NormalTok{(}\FloatTok{0.75} \OperatorTok{*}\StringTok{ }\KeywordTok{nrow}\NormalTok{(data_set))}
+
+\NormalTok{## set the seed to make your partition reproductible}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{train_ind <-}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\KeywordTok{seq_len}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(data_set)), }\DataTypeTok{size =}\NormalTok{ smp_size)}
+
+\NormalTok{train_set <-}\StringTok{ }\NormalTok{data_set[train_ind, ]}
+\NormalTok{test_set <-}\StringTok{ }\NormalTok{data_set[}\OperatorTok{-}\NormalTok{train_ind, ]}
+
+\NormalTok{y_test<-}\KeywordTok{as.data.frame}\NormalTok{(test_set[,}\DecValTok{12}\NormalTok{], }\DataTypeTok{drop=}\NormalTok{false)}
+\KeywordTok{names}\NormalTok{(y_test)<-}\KeywordTok{c}\NormalTok{(}\StringTok{"purchase"}\NormalTok{)}
+
+\NormalTok{test_set<-}\KeywordTok{as.data.frame}\NormalTok{(test_set[,}\DecValTok{1}\OperatorTok{:}\DecValTok{11}\NormalTok{], }\DataTypeTok{drop=}\NormalTok{false)}
+\KeywordTok{dim}\NormalTok{(test_set)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 137517     11
+\end{verbatim}
+
+\subsection{2.2 Checking dimensions of the
+data}\label{checking-dimensions-of-the-data}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(train_set)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 412551     12
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(test_set)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 137517     11
+\end{verbatim}
+
+\textbf{Training data} set consists of 4,12,551 entries across 12
+variables.\\
+\textbf{Test Data} set consists of 1,37,517 entries across 11 variables.
+
+12th variable in Training Data set is our response Variable which needs
+to be predicted in test data set.
+
+\section{2.3 Understanding the Data
+set}\label{understanding-the-data-set}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(psych)}
+\KeywordTok{describe}\NormalTok{(train_set)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                             vars      n       mean      sd  median
+## User_ID                        1 412551 1003030.35 1728.22 1003080
+## Product_ID*                    2 412551    1708.53 1011.98    1668
+## Gender*                        3 412551       1.75    0.43       2
+## Age*                           4 412551       3.50    1.35       3
+## Occupation                     5 412551       8.08    6.53       7
+## City_Category*                 6 412551       2.04    0.76       2
+## Stay_In_Current_City_Years*    7 412551       2.86    1.29       3
+## Marital_Status                 8 412551       0.41    0.49       0
+## Product_Category_1             9 412551       5.41    3.94       5
+## Product_Category_2            10 282116       9.85    5.09       9
+## Product_Category_3            11 124786      12.67    4.12      14
+## Purchase                      12 412551    9261.00 5022.12    8044
+##                                trimmed     mad     min     max range  skew
+## User_ID                     1003028.59 2180.90 1000001 1006040  6039  0.00
+## Product_ID*                    1688.75 1196.46       1    3631  3630  0.15
+## Gender*                           1.82    0.00       1       2     1 -1.17
+## Age*                              3.36    1.48       1       7     6  0.81
+## Occupation                        7.69    8.90       0      20    20  0.40
+## City_Category*                    2.05    1.48       1       3     2 -0.07
+## Stay_In_Current_City_Years*       2.82    1.48       1       5     4  0.32
+## Marital_Status                    0.39    0.00       0       1     1  0.37
+## Product_Category_1                4.91    4.45       1      20    19  1.02
+## Product_Category_2               10.00    7.41       2      18    16 -0.17
+## Product_Category_3               13.07    2.97       3      18    15 -0.77
+## Purchase                       8925.40 4250.61      12   23961 23949  0.60
+##                             kurtosis   se
+## User_ID                        -1.20 2.69
+## Product_ID*                    -1.09 1.58
+## Gender*                        -0.63 0.00
+## Age*                            0.30 0.00
+## Occupation                     -1.22 0.01
+## City_Category*                 -1.27 0.00
+## Stay_In_Current_City_Years*    -1.07 0.00
+## Marital_Status                 -1.86 0.00
+## Product_Category_1              1.22 0.01
+## Product_Category_2             -1.43 0.01
+## Product_Category_3             -0.81 0.01
+## Purchase                       -0.34 7.82
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{describe}\NormalTok{(test_set)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                             vars      n       mean      sd  median
+## User_ID                        1 137517 1003024.33 1725.69 1003070
+## Product_ID*                    2 137517    1708.31 1012.87    1665
+## Gender*                        3 137517       1.75    0.43       2
+## Age*                           4 137517       3.49    1.36       3
+## Occupation                     5 137517       8.07    6.51       7
+## City_Category*                 6 137517       2.04    0.76       2
+## Stay_In_Current_City_Years*    7 137517       2.86    1.29       3
+## Marital_Status                 8 137517       0.41    0.49       0
+## Product_Category_1             9 137517       5.38    3.93       5
+## Product_Category_2            10  94314       9.82    5.08       9
+## Product_Category_3            11  42035      12.67    4.13      14
+##                                trimmed     mad     min     max range  skew
+## User_ID                     1003021.88 2172.01 1000001 1006040  6039  0.00
+## Product_ID*                    1688.48 1200.91       1    3631  3630  0.15
+## Gender*                           1.82    0.00       1       2     1 -1.18
+## Age*                              3.35    1.48       1       7     6  0.81
+## Occupation                        7.69    8.90       0      20    20  0.40
+## City_Category*                    2.05    1.48       1       3     2 -0.07
+## Stay_In_Current_City_Years*       2.82    1.48       1       5     4  0.32
+## Marital_Status                    0.39    0.00       0       1     1  0.37
+## Product_Category_1                4.88    4.45       1      20    19  1.04
+## Product_Category_2                9.97    7.41       2      18    16 -0.15
+## Product_Category_3               13.07    2.97       3      18    15 -0.76
+##                             kurtosis   se
+## User_ID                        -1.19 4.65
+## Product_ID*                    -1.09 2.73
+## Gender*                        -0.60 0.00
+## Age*                            0.30 0.00
+## Occupation                     -1.22 0.02
+## City_Category*                 -1.27 0.00
+## Stay_In_Current_City_Years*    -1.07 0.00
+## Marital_Status                 -1.87 0.00
+## Product_Category_1              1.27 0.01
+## Product_Category_2             -1.43 0.02
+## Product_Category_3             -0.81 0.02
+\end{verbatim}
+
+\section{3. Univariate Analysis}\label{univariate-analysis}
+
+Let's First Find categorical and continuos variables in our training
+data set.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(train_set)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    412551 obs. of  12 variables:
+##  $ User_ID                   : int  1000442 1000778 1004647 1002875 1001675 1003848 1002801 1003626 1004682 1002774 ...
+##  $ Product_ID                : Factor w/ 3631 levels "P00000142","P00000242",..: 356 1673 2771 1017 2244 971 3510 1866 2134 1183 ...
+##  $ Gender                    : Factor w/ 2 levels "F","M": 2 2 2 2 1 2 1 2 2 2 ...
+##  $ Age                       : Factor w/ 7 levels "0-17","18-25",..: 3 2 4 3 3 3 3 3 3 3 ...
+##  $ Occupation                : int  1 17 20 2 6 15 3 17 7 1 ...
+##  $ City_Category             : Factor w/ 3 levels "A","B","C": 1 3 2 2 2 3 1 2 2 1 ...
+##  $ Stay_In_Current_City_Years: Factor w/ 5 levels "0","1","2","3",..: 3 5 2 4 2 2 2 4 4 2 ...
+##  $ Marital_Status            : int  0 0 1 1 1 0 1 0 1 0 ...
+##  $ Product_Category_1        : int  5 8 8 1 11 5 5 5 8 1 ...
+##  $ Product_Category_2        : int  NA NA NA 2 NA NA 8 11 NA 2 ...
+##  $ Product_Category_3        : int  NA NA NA 8 NA NA NA NA NA 15 ...
+##  $ Purchase                  : int  5472 9996 5864 19483 4592 8724 5183 5141 8050 15199 ...
+\end{verbatim}
+
+\subsection{Data Prepartion \& Exploratory Data
+Analysis}\label{data-prepartion-exploratory-data-analysis}
+
+Firstly doing the univariate exploration and modifying the data if
+deemed necessary.
+
+\textbf{one way contigency table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mytable <-}\StringTok{ }\KeywordTok{with}\NormalTok{(train_set,}\KeywordTok{table}\NormalTok{(Gender))}
+\NormalTok{mytable}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Gender
+##      F      M 
+## 102021 310530
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lbls <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"M"}\NormalTok{,}\StringTok{"F"}\NormalTok{)}
+\NormalTok{pct <-}\StringTok{ }\KeywordTok{round}\NormalTok{(mytable}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(mytable)}\OperatorTok{*}\DecValTok{100}\NormalTok{)}
+\NormalTok{lbls <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(lbls, pct) }
+\NormalTok{lbls <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(lbls,}\StringTok{"%"}\NormalTok{,}\DataTypeTok{sep=}\StringTok{""}\NormalTok{)}
+\KeywordTok{pie}\NormalTok{(mytable,}\DataTypeTok{labels =}\NormalTok{ lbls)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{visualization_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mytable1 <-}\StringTok{ }\KeywordTok{with}\NormalTok{(train_set,}\KeywordTok{table}\NormalTok{(Marital_Status))}
+\NormalTok{mytable1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Marital_Status
+##      0      1 
+## 243555 168996
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lbls1 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Single"}\NormalTok{,}\StringTok{"Married"}\NormalTok{)}
+\NormalTok{pct1 <-}\StringTok{ }\KeywordTok{round}\NormalTok{(mytable1}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(mytable1)}\OperatorTok{*}\DecValTok{100}\NormalTok{)}
+\NormalTok{lbls1 <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(lbls1, pct1) }
+\NormalTok{lbls1<-}\StringTok{ }\KeywordTok{paste}\NormalTok{(lbls1,}\StringTok{"%"}\NormalTok{,}\DataTypeTok{sep=}\StringTok{""}\NormalTok{)}
+\KeywordTok{pie}\NormalTok{(mytable1,}\DataTypeTok{labels =}\NormalTok{ lbls1)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{visualization_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mytable2 <-}\StringTok{ }\KeywordTok{with}\NormalTok{(train_set,}\KeywordTok{table}\NormalTok{(City_Category))}
+\NormalTok{mytable2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## City_Category
+##      A      B      C 
+## 110815 173429 128307
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lbls2 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{,}\StringTok{"B"}\NormalTok{,}\StringTok{"C"}\NormalTok{)}
+\NormalTok{pct2 <-}\StringTok{ }\KeywordTok{round}\NormalTok{(mytable2}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(mytable2)}\OperatorTok{*}\DecValTok{100}\NormalTok{)}
+\NormalTok{lbls2 <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(lbls2, pct2) }
+\NormalTok{lbls2<-}\StringTok{ }\KeywordTok{paste}\NormalTok{(lbls2,}\StringTok{"%"}\NormalTok{,}\DataTypeTok{sep=}\StringTok{""}\NormalTok{)}
+\KeywordTok{pie}\NormalTok{(mytable2,}\DataTypeTok{labels =}\NormalTok{ lbls2)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{visualization_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\CommentTok{#train data}
+\KeywordTok{with}\NormalTok{(train_set,}\KeywordTok{table}\NormalTok{(Stay_In_Current_City_Years))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Stay_In_Current_City_Years
+##      0      1      2      3     4+ 
+##  55676 145504  76472  71518  63381
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#test data}
+\KeywordTok{with}\NormalTok{(test_set,}\KeywordTok{table}\NormalTok{(Stay_In_Current_City_Years))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Stay_In_Current_City_Years
+##     0     1     2     3    4+ 
+## 18722 48317 25366 23767 21345
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\NormalTok{a<-}\KeywordTok{with}\NormalTok{(train_set,}\KeywordTok{table}\NormalTok{(Product_Category_}\DecValTok{1}\NormalTok{))}
+\CommentTok{#a}
+\KeywordTok{barplot}\NormalTok{(a,}\DataTypeTok{main =}\StringTok{"train_data"}\NormalTok{)}
+\NormalTok{b<-}\KeywordTok{with}\NormalTok{(test_set,}\KeywordTok{table}\NormalTok{(Product_Category_}\DecValTok{1}\NormalTok{))}
+\CommentTok{#b}
+\KeywordTok{barplot}\NormalTok{(b,}\DataTypeTok{main =}\StringTok{"test_data"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{visualization_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\NormalTok{a<-}\KeywordTok{with}\NormalTok{(train_set,}\KeywordTok{table}\NormalTok{(Product_Category_}\DecValTok{2}\NormalTok{))}
+\CommentTok{#a}
+\KeywordTok{barplot}\NormalTok{(a,}\DataTypeTok{main =}\StringTok{"train_data"}\NormalTok{)}
+\NormalTok{b<-}\KeywordTok{with}\NormalTok{(test_set,}\KeywordTok{table}\NormalTok{(Product_Category_}\DecValTok{2}\NormalTok{))}
+\CommentTok{#b}
+\KeywordTok{barplot}\NormalTok{(b,}\DataTypeTok{main =}\StringTok{"test_data"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{visualization_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(lattice)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\NormalTok{a<-}\KeywordTok{with}\NormalTok{(train_set,}\KeywordTok{table}\NormalTok{(Product_Category_}\DecValTok{3}\NormalTok{))}
+\CommentTok{#a}
+\KeywordTok{barchart}\NormalTok{(a,}\DataTypeTok{main =}\StringTok{"train_data"}\NormalTok{,}\DataTypeTok{horizontal =} \StringTok{"FALSE"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{visualization_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{b<-}\KeywordTok{with}\NormalTok{(test_set,}\KeywordTok{table}\NormalTok{(Product_Category_}\DecValTok{3}\NormalTok{))}
+\CommentTok{#b}
+\KeywordTok{barchart}\NormalTok{(b,}\DataTypeTok{main =}\StringTok{"test_data"}\NormalTok{,}\DataTypeTok{horizontal =} \StringTok{"FALSE"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{visualization_files/figure-latex/unnamed-chunk-11-2.pdf}
+
+\textbf{2 way table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{xtabs}\NormalTok{(}\OperatorTok{~}\NormalTok{Marital_Status}\OperatorTok{+}\NormalTok{Gender,}\DataTypeTok{data=}\NormalTok{train_set)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##               Gender
+## Marital_Status      F      M
+##              0  59207 184348
+##              1  42814 126182
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{xtabs}\NormalTok{(Purchase}\OperatorTok{~}\NormalTok{Product_Category_}\DecValTok{3}\NormalTok{,}\KeywordTok{aggregate}\NormalTok{(Purchase}\OperatorTok{~}\NormalTok{Product_Category_}\DecValTok{3}\NormalTok{,train_set,mean))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Product_Category_3
+##         3         4         5         6         8         9        10 
+## 14058.795  9806.369 12128.368 13179.604 13047.715 10388.366 13507.104 
+##        11        12        13        14        15        16        17 
+## 12113.981  8703.027 13237.030 10036.091 12342.484 11960.804 11737.853 
+##        18 
+## 11015.255
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{xtabs}\NormalTok{(Purchase}\OperatorTok{~}\NormalTok{Product_Category_}\DecValTok{2}\NormalTok{,}\KeywordTok{aggregate}\NormalTok{(Purchase}\OperatorTok{~}\NormalTok{Product_Category_}\DecValTok{2}\NormalTok{,train_set,mean))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Product_Category_2
+##         2         3         4         5         6         7         8 
+## 13610.833 11222.781 10216.105  9033.057 11516.350  6894.512 10247.663 
+##         9        10        11        12        13        14        15 
+##  7329.170 15715.654  8893.459  6996.297  9662.622  7101.230 10345.805 
+##        16        17        18 
+## 10289.805  9421.296  9328.248
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{xtabs}\NormalTok{(Purchase}\OperatorTok{~}\NormalTok{Product_Category_}\DecValTok{1}\NormalTok{,}\KeywordTok{aggregate}\NormalTok{(Purchase}\OperatorTok{~}\NormalTok{Product_Category_}\DecValTok{1}\NormalTok{,train_set,mean))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Product_Category_1
+##           1           2           3           4           5           6 
+## 13600.94860 11232.00870 10109.66465  2334.29817  6240.79881 15830.96146 
+##           7           8           9          10          11          12 
+## 16374.65185  7497.88064 15754.68932 19668.12699  4687.24631  1344.33266 
+##          13          14          15          16          17          18 
+##   720.56800 13143.73906 14790.16472 14754.58678 10167.59811  2979.82756 
+##          19          20 
+##    36.78061   369.85307
+\end{verbatim}
+
+\subsection{3.1. Unique Data For EDA \& Data type
+modification}\label{unique-data-for-eda-data-type-modification}
+
+Since our data is stored based on product id i.e.~if a person buying 10
+products then his data will be stored in 10 observation and hence there
+will cause a repetition of same person data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{train_set}\OperatorTok{$}\NormalTok{User_ID <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(train_set}\OperatorTok{$}\NormalTok{User_ID)}
+\NormalTok{train_set}\OperatorTok{$}\NormalTok{Product_ID <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(train_set}\OperatorTok{$}\NormalTok{Product_ID)}
+\NormalTok{train_set}\OperatorTok{$}\NormalTok{Marital_Status <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(}\KeywordTok{ifelse}\NormalTok{(train_set}\OperatorTok{$}\NormalTok{Marital_Status }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{, }\StringTok{'Married'}\NormalTok{, }\StringTok{'Single'}\NormalTok{))}
+\NormalTok{train_set}\OperatorTok{$}\NormalTok{Age <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(train_set}\OperatorTok{$}\NormalTok{Age)}
+\NormalTok{train_set}\OperatorTok{$}\NormalTok{Gender <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(}\KeywordTok{ifelse}\NormalTok{(train_set}\OperatorTok{$}\NormalTok{Gender}\OperatorTok{==}\StringTok{'M'}\NormalTok{, }\StringTok{'Male'}\NormalTok{, }\StringTok{'Female'}\NormalTok{))}
+\NormalTok{train_set}\OperatorTok{$}\NormalTok{Occupation <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(train_set}\OperatorTok{$}\NormalTok{Occupation)}
+\NormalTok{train_set}\OperatorTok{$}\NormalTok{City_Category <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(train_set}\OperatorTok{$}\NormalTok{City_Category)}
+\NormalTok{train_set}\OperatorTok{$}\NormalTok{Stay_In_Current_City_Years <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(train_set}\OperatorTok{$}\NormalTok{Stay_In_Current_City_Years)}
+
+\NormalTok{test_set}\OperatorTok{$}\NormalTok{User_ID <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(test_set}\OperatorTok{$}\NormalTok{User_ID)}
+\NormalTok{test_set}\OperatorTok{$}\NormalTok{Product_ID <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(test_set}\OperatorTok{$}\NormalTok{Product_ID)}
+\NormalTok{test_set}\OperatorTok{$}\NormalTok{Marital_Status <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(}\KeywordTok{ifelse}\NormalTok{(test_set}\OperatorTok{$}\NormalTok{Marital_Status }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{, }\StringTok{'Married'}\NormalTok{, }\StringTok{'Single'}\NormalTok{))}
+\NormalTok{test_set}\OperatorTok{$}\NormalTok{Age <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(test_set}\OperatorTok{$}\NormalTok{Age)}
+\NormalTok{test_set}\OperatorTok{$}\NormalTok{Gender <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(}\KeywordTok{ifelse}\NormalTok{(test_set}\OperatorTok{$}\NormalTok{Gender}\OperatorTok{==}\StringTok{'M'}\NormalTok{, }\StringTok{'Male'}\NormalTok{, }\StringTok{'Female'}\NormalTok{))}
+\NormalTok{test_set}\OperatorTok{$}\NormalTok{Occupation <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(test_set}\OperatorTok{$}\NormalTok{Occupation)}
+\NormalTok{test_set}\OperatorTok{$}\NormalTok{City_Category <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(test_set}\OperatorTok{$}\NormalTok{City_Category)}
+\NormalTok{test_set}\OperatorTok{$}\NormalTok{Stay_In_Current_City_Years <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(test_set}\OperatorTok{$}\NormalTok{Stay_In_Current_City_Years)}
+
+\CommentTok{#str(train_set)}
+\CommentTok{#str(test_set)}
+\end{Highlighting}
+\end{Shaded}
+
+The function distinct() in dplyr package can be used to keep only
+unique/distinct rows from a data frame. If there are duplicate rows,
+only the first row is preserved. It's an efficient version of the R base
+function unique().
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"dplyr"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{EDA_Distinct <-}\StringTok{ }\KeywordTok{distinct}\NormalTok{(train_set, User_ID, Age, Gender, Marital_Status, Occupation, City_Category, Stay_In_Current_City_Years)}
+\CommentTok{#str(EDA_Distinct)}
+\KeywordTok{head}\NormalTok{(EDA_Distinct)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   User_ID Gender   Age Occupation City_Category Stay_In_Current_City_Years
+## 1 1000442   Male 26-35          1             A                          2
+## 2 1000778   Male 18-25         17             C                         4+
+## 3 1004647   Male 36-45         20             B                          1
+## 4 1002875   Male 26-35          2             B                          3
+## 5 1001675 Female 26-35          6             B                          1
+## 6 1003848   Male 26-35         15             C                          1
+##   Marital_Status
+## 1         Single
+## 2         Single
+## 3        Married
+## 4        Married
+## 5        Married
+## 6         Single
+\end{verbatim}
+
+\section{3.2. User\_ID}\label{user_id}
+
+**
+
+
+\end{document}
